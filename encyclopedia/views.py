@@ -3,6 +3,7 @@ from . import util
 from markdown2 import Markdown
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from . import forms
 
 
 def index(request):
@@ -16,7 +17,7 @@ def entry(request, title):
     markdowner = Markdown()
 
     if content == None:
-        return render(request, "encyclopedia\error.html", {"title": title})
+        return render(request, "encyclopedia\error.html", {"message": "The Page You Searched Doesn't Exist"})
     content = markdowner.convert(content)
     return render(request, "encyclopedia\entry.html", {
         "title": title,
@@ -49,8 +50,23 @@ def search(request):
 def newPage(request):
     if request.method == 'GET':
         return render(request, "encyclopedia/newPage.html", {
-            "form": newPageForm
+            "form": forms.newPageForm()
         })
     else:
-        pass
+        # saving user submitted form
+        form = forms.newPageForm(request.POST)
+
+        # checking if form is valid 
+        if form.is_valid():
+            # cleaning data
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+            # if title already exist
+            if (util.get_entry(title)):
+                return render(request, "encyclopedia\entry.html", {
+                    "message": "This Entry Already Exist!"
+                })
+                
+
+        
 
