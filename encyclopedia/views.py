@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from . import util
 from markdown2 import Markdown
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def index(request):
@@ -45,4 +47,10 @@ def search(request):
             })
 
 def newPage(request):
-    pass
+    if request.method == 'GET':
+        return render(request, "encyclopedia/newPage.html", {
+            "form": newPageForm
+        })
+    else:
+        pass
+
