@@ -9,5 +9,6 @@
     <form class="form-group" method="POST">
         {% csrf_token %}
         {{form}}
+        <input class="btn btn-primary mt-3" type="submit" value="Save Entry">
     </form>
 {% endblock %}

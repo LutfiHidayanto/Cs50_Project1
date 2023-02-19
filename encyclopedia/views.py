@@ -66,7 +66,10 @@ def newPage(request):
                 return render(request, "encyclopedia\entry.html", {
                     "message": "This Entry Already Exist!"
                 })
-                
+            else:
+                # saving new page
+                util.save_entry(title, description)
+                return HttpResponseRedirect(reverse('wiki_entry', args=[title]))
 
         
 
