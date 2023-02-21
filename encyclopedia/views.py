@@ -4,7 +4,7 @@ from markdown2 import Markdown
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from . import forms
-
+from random import choice
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -60,7 +60,7 @@ def newPage(request):
         if form.is_valid():
             # cleaning data
             title = form.cleaned_data["title"]
-            description = form.cleaned_data["description"]
+            content = form.cleaned_data["content"]
             # if title already exist
             if (util.get_entry(title)):
                 return render(request, "encyclopedia\entry.html", {
@@ -68,8 +68,30 @@ def newPage(request):
                 })
             else:
                 # saving new page
-                util.save_entry(title, description)
-                return HttpResponseRedirect(reverse('wiki_entry', args=[title]))
+                util.save_entry(title, content)
+                return HttpResponseRedirect(reverse('entry', args=[title])) 
 
+
+def editPage(request, title):
+    form = forms.editPageForm(initial={'content': util.get_entry(title)})
+
+    
+    if request.method == 'POST':
+        edit = forms.editPageForm(request.POST)
+
+        if edit.is_valid():
+            content = edit.cleaned_data["content"]
+            util.save_entry(title, content)
+            return HttpResponseRedirect(reverse('entry', args=[title])) 
         
+    else:
+        return render(request, "encyclopedia/edit.html", {
+                    "title": title,
+                    "form": form 
+                })
+    
 
+def random(request):
+    randomTitle = choice(util.list_entries())
+
+    return HttpResponseRedirect(reverse('entry', args=[randomTitle]))

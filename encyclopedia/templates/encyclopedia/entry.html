@@ -6,4 +6,8 @@
 
 {% block body %}
     {{ content|safe }}
+    <form action="{% url 'edit' title %}" class="form-group">
+        {% csrf_token %}
+        <input class="btn btn-primary mt-3" type="submit" value="Edit Page">
+    </form>
 {% endblock %}
