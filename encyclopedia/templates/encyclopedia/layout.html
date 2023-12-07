@@ -11,7 +11,10 @@
     <body>
         <div class="row">
             <div class="sidebar col-lg-2 col-md-3">
-                <h2>Wiki</h2>
+                <div class="text-center mb-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/1024px-Wikipedia-logo-v2.svg.png" width="80%">
+                <h3>CS50Wiki</h3>
+                </div>
                 <form action="{% url 'search' %}" method="POST">
                     {% csrf_token %}
                     <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
